@@ -1,7 +1,7 @@
 package com.cracow.kafka.producer;
 
 import com.cracow.kafka.config.KafkaConfig;
-import com.cracow.kafka.dto.DeviceDto;
+import com.cracow.kafka.dto.SensorDto;
 import com.cracow.kafka.serializer.DeviceSerializer;
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -11,7 +11,7 @@ import org.apache.kafka.common.serialization.LongSerializer;
 
 public final class ProducerKafkaCreator {
 
-  public static Producer<Long, DeviceDto> build() {
+  public static Producer<Long, SensorDto> build() {
     Properties props = new Properties();
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConfig.KAFKA_BROKERS);
     props.put(ProducerConfig.CLIENT_ID_CONFIG, KafkaConfig.CLIENT_ID);

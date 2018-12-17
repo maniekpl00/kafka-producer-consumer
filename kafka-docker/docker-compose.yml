@@ -1,5 +1,9 @@
+version: '3'
+
+services:
   kafka:
     image: confluentinc/cp-kafka:4.0.2
+    container_name: kafka
     depends_on:
       - zookeeper
     environment:
@@ -15,8 +19,9 @@
       - 9999:9999
     restart: unless-stopped
 
- kafka-manager:
+  kafka-manager:
     image: sheepkiller/kafka-manager:alpine
+    container_name: kafka-manager
     depends_on:
       - zookeeper
     networks:
@@ -28,3 +33,14 @@
       - 9001:9001
     restart: unless-stopped
 
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    networks:
+      - kafka_network
+    ports:
+      - "2181:2181"
+
+networks:
+  kafka_network:
+    external: true

@@ -2,7 +2,7 @@ package com.cracow.kafka.dto;
 
 import java.io.Serializable;
 
-public class DeviceDto implements Serializable {
+public class SensorDto implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String id;

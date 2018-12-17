@@ -1,7 +1,7 @@
 package com.cracow.kafka;
 
 import com.cracow.kafka.config.KafkaConfig;
-import com.cracow.kafka.dto.DeviceDto;
+import com.cracow.kafka.dto.SensorDto;
 import com.cracow.kafka.producer.ProducerKafkaCreator;
 import com.cracow.kafka.serializer.DeviceSerializer;
 import java.util.concurrent.ExecutionException;
@@ -16,14 +16,14 @@ public class ProducerKafkaApp {
   }
 
   private static void run() {
-    final Producer<Long, DeviceDto> producer = ProducerKafkaCreator.build();
+    final Producer<Long, SensorDto> producer = ProducerKafkaCreator.build();
     final DeviceSerializer deviceSerializer = new DeviceSerializer();
 
     for(int i = 0; i < KafkaConfig.MESSAGE_COUNT; i++) {
-      DeviceDto deviceDto = new DeviceDto(String.valueOf(i), "Name" + i);
+      SensorDto sensorDto = new SensorDto(String.valueOf(i), "Name" + i);
 
-      final ProducerRecord<Long, DeviceDto> record =
-          new ProducerRecord<>(KafkaConfig.TOPIC_NAME, deviceDto);
+      final ProducerRecord<Long, SensorDto> record =
+          new ProducerRecord<>(KafkaConfig.TOPIC_NAME, sensorDto);
       try {
         RecordMetadata metadata = producer.send(record).get();
         System.out.println("Record sent with key " + i + " to partition " + metadata.partition()
