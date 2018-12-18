@@ -8,26 +8,28 @@ import org.apache.kafka.common.serialization.Serializer;
 
 public class DeviceSerializer implements Serializer<SensorDto> {
 
-  private static final ObjectMapper mapper = new ObjectMapper();
+  private ObjectMapper mapper;
 
   @Override
   public void configure(Map<String, ?> configs, boolean isKey) {
-
+    if(mapper == null) {
+      mapper = new ObjectMapper();
+    }
   }
 
   @Override
   public byte[] serialize(String topic, SensorDto data) {
-    byte[] result = null;
+    byte[] result;
     try {
       result = mapper.writeValueAsString(data).getBytes();
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
+      throw new IllegalArgumentException(e);
     }
     return result;
   }
 
   @Override
   public void close() {
-    //TODO closing
+    mapper = null;
   }
 }

@@ -2,6 +2,8 @@ package com.cracow.kafka;
 
 import com.cracow.kafka.config.KafkaConfig;
 import com.cracow.kafka.consumer.ConsumerCreator;
+import com.cracow.kafka.dto.SensorDto;
+import java.time.Instant;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -13,24 +15,27 @@ public class ConsumerKafkaApp {
   }
 
   private static void run() {
-    final Consumer<Long, String> consumer = ConsumerCreator.build();
+    final Consumer<Long, SensorDto> consumer = ConsumerCreator.build();
 
     int noMessageToFetch = 0;
 
-    while(noMessageToFetch < KafkaConfig.MESSAGE_COUNT) {
-      final ConsumerRecords<Long, String> consumerRecords = consumer.poll(1000);
+    while(noMessageToFetch < KafkaConfig.MAX_NO_MESSAGE_FOUND_COUNT) {
+      final ConsumerRecords<Long, SensorDto> consumerRecords = consumer.poll(1000);
       if(consumerRecords.isEmpty()) {
         noMessageToFetch++;
         continue;
       }
       consumerRecords.forEach(record -> print(record));
     }
+    consumer.close();
   }
 
   private static void print(ConsumerRecord record) {
-    System.out.println(record.key());
-    System.out.println(record.value());
-    System.out.println(record.partition());
-    System.out.println(record.offset());
+    SensorDto sensorDto = (SensorDto) record.value();
+    if(sensorDto.getEventTime() < Instant.now().getEpochSecond()) {
+      String messageLog = String.format("Key: %s, value: %s, partition: %s, offset: %s",
+          record.key(), record.value(), record.partition(), record.offset());
+      System.out.println(messageLog);
+    }
   }
 }

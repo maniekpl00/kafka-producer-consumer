@@ -4,9 +4,9 @@ public final class KafkaConfig {
 
   public static final String KAFKA_BROKERS = "localhost:9092";
 
-  public static final Integer MESSAGE_COUNT = 50;
+  public static final Integer MESSAGE_COUNT = 2;
 
-  public static final String CLIENT_ID = "client1";
+  public static final String CLIENT_ID = "kafka-consumer";
 
   public static final String TOPIC_NAME = "topic_demo";
 

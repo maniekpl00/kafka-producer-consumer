@@ -4,6 +4,7 @@ import com.cracow.kafka.config.KafkaConfig;
 import com.cracow.kafka.dto.SensorDto;
 import com.cracow.kafka.producer.ProducerKafkaCreator;
 import com.cracow.kafka.serializer.DeviceSerializer;
+import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,19 +21,23 @@ public class ProducerKafkaApp {
     final DeviceSerializer deviceSerializer = new DeviceSerializer();
 
     for(int i = 0; i < KafkaConfig.MESSAGE_COUNT; i++) {
-      SensorDto sensorDto = new SensorDto(String.valueOf(i), "Name" + i);
+      String id = "id" + i;
+      String serialNumber = "SerialCHL" + i;
+      SensorDto sensorDto = new SensorDto(id, serialNumber, Instant.now().getEpochSecond());
 
       final ProducerRecord<Long, SensorDto> record =
-          new ProducerRecord<>(KafkaConfig.TOPIC_NAME, sensorDto);
+          new ProducerRecord<>(KafkaConfig.TOPIC_NAME, Long.valueOf(i), sensorDto);
       try {
         RecordMetadata metadata = producer.send(record).get();
-        System.out.println("Record sent with key " + i + " to partition " + metadata.partition()
-            + " with offset " + metadata.offset());
+        String messageLog = String.format("Key: %s, partition: %s, offset: %s, value: %s",
+          i, metadata.partition(), metadata.offset(), sensorDto);
+        System.out.println(messageLog);
       } catch (InterruptedException e) {
         e.printStackTrace();
       } catch (ExecutionException e) {
         e.printStackTrace();
       }
     }
+    producer.close();
   }
 }

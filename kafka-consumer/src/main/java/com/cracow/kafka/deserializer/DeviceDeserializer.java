@@ -7,26 +7,28 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 
 public class DeviceDeserializer implements Deserializer<SensorDto> {
-  private static final ObjectMapper mapper = new ObjectMapper();
+  private ObjectMapper mapper;
 
   @Override
   public void configure(Map<String, ?> configs, boolean isKey) {
-
+    if(mapper == null) {
+      mapper = new ObjectMapper();
+    }
   }
 
   @Override
   public SensorDto deserialize(String topic, byte[] data) {
-    SensorDto result = null;
+    SensorDto result;
     try {
       result = mapper.readValue(data, SensorDto.class);
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new IllegalArgumentException(e);
     }
     return result;
   }
 
   @Override
   public void close() {
-
+    mapper = null;
   }
 }

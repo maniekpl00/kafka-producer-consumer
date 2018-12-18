@@ -6,11 +6,16 @@ public class SensorDto implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String id;
-  private String name;
+  private String serialNumber;
+  private Long eventTime;
 
-  public SensorDto(String id, String name) {
+  public SensorDto() {
+  }
+
+  public SensorDto(String id, String serialNumber, Long eventTime) {
     this.id = id;
-    this.name = name;
+    this.serialNumber = serialNumber;
+    this.eventTime = eventTime;
   }
 
   public String getId() {
@@ -21,11 +26,27 @@ public class SensorDto implements Serializable {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getSerialNumber() {
+    return serialNumber;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setSerialNumber(String serialNumber) {
+    this.serialNumber = serialNumber;
+  }
+
+  public Long getEventTime() {
+    return eventTime;
+  }
+
+  public void setEventTime(Long eventTime) {
+    this.eventTime = eventTime;
+  }
+
+  @Override
+  public String toString() {
+    return "SensorDto{" +
+        "id='" + id + '\'' +
+        ", serialNumber='" + serialNumber + '\'' +
+        '}';
   }
 }
