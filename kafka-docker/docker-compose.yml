@@ -19,19 +19,19 @@ services:
       - 9999:9999
     restart: unless-stopped
 
-  kafka-manager:
-    image: sheepkiller/kafka-manager:alpine
-    container_name: kafka-manager
-    depends_on:
-      - zookeeper
-    networks:
-      - kafka_network
-    environment:
-      - ZK_HOSTS=zookeeper:2181
-      - KM_ARGS=-Dhttp.port=9001
-    ports:
-      - 9001:9001
-    restart: unless-stopped
+#  kafka-manager:
+#    image: sheepkiller/kafka-manager:alpine
+#    container_name: kafka-manager
+#    depends_on:
+#      - zookeeper
+#    networks:
+#      - kafka_network
+#    environment:
+#      - ZK_HOSTS=zookeeper:2181
+#      - KM_ARGS=-Dhttp.port=9001
+#    ports:
+#      - 9001:9001
+#    restart: unless-stopped
 
   zookeeper:
     image: wurstmeister/zookeeper
